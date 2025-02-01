@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habit Tracker Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+header {
+  text-align: center;
+  background-color: #6200ea;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+h1 {
+  margin: 0;
+}
+
+main {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+section {
+  margin-bottom: 2rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+form input, form button {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  background-color: #6200ea;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #5300c9;
+}
+
+#habits-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.habit-card {
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  flex: 1 1 calc(50% - 1rem);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.habit-card h3 {
+  margin-top: 0;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem 0;
+  background-color: #6200ea;
+  color: #fff;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Habit Tracker</h1>
+  </header>
+  <main>
+    <section id="habit-form">
+      <h2>Add a New Habit</h2>
+      <form id="add-habit-form">
+        <label for="habit-name">Habit Name:</label>
+        <input type="text" id="habit-name" placeholder="e.g., Morning Run" required />
+        <label for="habit-goal">Daily Goal:</label>
+        <input type="number" id="habit-goal" placeholder="e.g., 30 minutes" required />
+        <button type="submit">Add Habit</button>
+      </form>
+    </section>
+    <section id="habit-list">
+      <h2>Your Habits</h2>
+      <div id="habits-container">
+        <!-- Habit cards will appear here dynamically -->
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Habit Tracker</p>
+  </footer>
+  <script src="script.js">
+    // Select elements
+const habitForm = document.getElementById("add-habit-form");
+const habitNameInput = document.getElementById("habit-name");
+const habitGoalInput = document.getElementById("habit-goal");
+const habitsContainer = document.getElementById("habits-container");
+
+// Habit storage
+const habits = [];
+
+// Handle form submission
+habitForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const habitName = habitNameInput.value.trim();
+  const habitGoal = habitGoalInput.value.trim();
+
+  if (habitName === "" || habitGoal === "") {
+    alert("Please fill in both fields!");
+    return;
+  }
+
+  // Add habit to the array
+  const newHabit = { name: habitName, goal: habitGoal, progress: 0 };
+  habits.push(newHabit);
+
+  // Update UI
+  displayHabits();
+
+  // Clear form inputs
+  habitNameInput.value = "";
+  habitGoalInput.value = "";
+});
+
+// Function to display habits
+function displayHabits() {
+  // Clear existing habits
+  habitsContainer.innerHTML = "";
+
+  habits.forEach((habit, index) => {
+    const habitCard = document.createElement("div");
+    habitCard.classList.add("habit-card");
+
+    habitCard.innerHTML = `
+      <h3>${habit.name}</h3>
+      <p>Daily Goal: ${habit.goal}</p>
+      <p>Progress: ${habit.progress}</p>
+      <button onclick="updateProgress(${index})">Mark Progress</button>
+    `;
+
+    habitsContainer.appendChild(habitCard);
+  });
+}
+
+// Function to update progress
+function updateProgress(index) {
+  habits[index].progress++;
+  displayHabits();
+}
+  </script>
+</body>
+</html>
